@@ -1,0 +1,87 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    font-size: 2.5rem;
+    /* background: #ddd; */
+}
+
+#dateOuter {
+    position: absolute;
+    width: 100%;
+    border-radius: 5px;
+    /* background-color: rgb(202, 237, 255); */
+}
+
+.attendtittle {
+    height: 8rem;
+    line-height: 8rem;
+    /* height: 51px; */
+    /* line-height: 51px; */
+    /* border-bottom: 1px solid #E6E6EB; */
+}
+
+.everyWeekDay .weekday {
+    display: -moz-inline-box;
+    display: inline-block;
+    text-align: center;
+    line-height: 26px;
+    width: 13.6%;
+    border: 1px solid transparent;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.everyDay .days {
+    /*解决span不支持width属性*/
+    display: -moz-inline-box;
+    display: inline-block;
+    text-align: center;
+    /*height: 50px;*/
+    line-height: 9rem;
+    width: 13.6%;
+    border: 1px solid transparent;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+#attendwrapleft {
+    width: 100%;
+    float: left;
+}
+
+#attendwrap {
+    height: 300px;
+}
+
+.calendar-circle-point {
+    position: absolute;
+    bottom: -1rem;
+    right: 0rem;
+    border-radius: 100%;
+    width: 1rem;
+    height: 1rem;
+    background: red;
+}
+
+.circle-point-1 {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
+    background: red;
+    display: inline-block;
+    margin-left: 16px;
+}
+
+.calendar-choose {
+    background-color: #4eccc4;
+    color: #FFFFFF;
+    padding: 4px 10px;
+    border-radius: 100%;
+}
+
+.calendar-choose1 {
+    background-color: #4eccc4;
+    color: #FFFFFF;
+    padding: 4px 10px;
+    border-radius: 100%;
+}

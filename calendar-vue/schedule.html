@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>日历</title>
+	<link rel="stylesheet" href="./css/calendar.css">
+</head>
+
+<body>
+	<div id="app">
+		<div id="dateOuter">
+			<div class="attendtittle">
+				<span style="margin-left: 16px;color: #333;font-weight: bold;">工作日历</span>
+				<span
+					style="width: 44px;height: 24px;border: 1px solid #E6E6EB;padding:4px 8px;cursor: pointer;border-radius: 4px;font-size: 14px;color: #333;margin-left: 44px;"
+					@click.prevent="getThisDay()">今天</span>
+				<span style="margin-left: 17px;color:  #8E8E93;cursor: pointer;" @click.stop.prevent="lastMonthClick()"></span>
+						<span style="margin-left: 18px;color:  #8E8E93;cursor: pointer;"
+							@click.stop.prevent="nextMonthClick()">></span>
+						<span style="color: #2D2D2D;margin-left: 17px;">{{checkYear}}年</span>
+						<span style="color: #2D2D2D;">{{checkMonth}}月</span>
+			</div>
+			<!--表体-->
+			<div id="attendwrap">
+				<div id="attendwrapleft">
+					<div class="everyWeekDay">
+						<span v-for="(item,index) in weekDays" class="weekday">
+							<span v-if="item=='日' || item=='六'" class="weekday" style="color:#0089FA;">{{item}}</span>
+							<span class="weekday" style="color:#888;" v-else>{{item}}</span>
+						</span>
+					</div>
+					<div class="everyDay">
+						<!--空白站位-->
+						<span v-for="item1 in ThisWeekDayCounrt" :key="item1" class="days"></span>
+						<!--这个月的天数-->
+						<span @click="getdate(item)" v-for="(item,index) in thisDayCount" class="days">
+							<span v-if="checkYear == nowYear && checkMonth == nowMonth && index+1 == nowDay"
+								style="position: relative;">
+								<span v-if="cumWeekDayCounrt(index+1) == 6 || cumWeekDayCounrt(index+1) == 0"
+									class="days" style="width:100%;cursor:pointer;"><span
+										class="calendar-choose">{{index+1}}</span></span>
+								<span v-else class="days" style="width:100%; cursor:pointer;border-radius: 100%;">
+									<span class="calendar-choose1">{{index+1}}</span>
+								</span>
+								<!--循环日历上面的状态-->
+								<span v-for="(item,_index) in calData">
+									<span v-if="item.date==index+1">
+										<span v-for="(val,_in) in item.type">
+											<span
+												style="position: absolute;bottom: -12px;right:30px;border-radius: 100%;width: 6px;height: 6px;background: red;"
+												v-if="val==0"></span>
+											<div v-if="val==1"
+												:style="{position: 'absolute',bottom: '0px',right: 2.1*(_in+1)+'rem',color: '#0089FA',fontSize: '1.8rem'}">
+												加</div>
+											<div v-if="val==2"
+												:style="{position: 'absolute',bottom: '0px',right: 2.1*(_in+1)+'rem',color: '#5856D6',fontSize: '1.8rem'}">
+												差</div>
+											<div v-if="val==3"
+												:style="{position: 'absolute',bottom: '0px',right: 2.1*(_in+1)+'rem',color: '#FF9500',fontSize: '1.8rem'}">
+												假</div>
+											<div v-if="val==4"
+												:style="{position: 'absolute',bottom: '0px',right: 2.1*(_in+1)+'rem',color: '#00A753',fontSize: '1.8rem'}">
+												节</div>
+										</span>
+									</span>
+								</span>
+								<!--循环日历上面的状态 over-->
+							</span>
+
+							<span v-else style="position: relative;">
+								<span v-if="cumWeekDayCounrt(index+1) == 6 || cumWeekDayCounrt(index+1) == 0"
+									class="days" style="color:#0089FA;cursor:pointer;">{{index+1}}</span>
+								<span v-else style="cursor:pointer;">{{index+1}}</span>
+								<!--循环日历上面的状态-->
+								<span v-for="(item,_index) in calData">
+									<span v-if="item.date==index+1">
+										<span v-for="(val,_in) in item.type">
+											<span class="calendar-circle-point" v-if="val==0"></span>
+											<div v-if="val==1"
+												:style="{position: 'absolute',bottom: '0px',right: -2.1*(_in+1)+'rem',color: '#0089FA',fontSize: '1.8rem'}">
+												加</div>
+											<div v-if="val==2"
+												:style="{position: 'absolute',bottom: '0px',right: -2.1*(_in+1)+'rem',color: '#5856D6',fontSize: '1.8rem'}">
+												差</div>
+											<div v-if="val==3"
+												:style="{position: 'absolute',bottom: '0px',right: -2.1*(_in+1)+'rem',color: '#FF9500',fontSize: '1.8rem'}">
+												假</div>
+											<div v-if="val==4"
+												:style="{position: 'absolute',bottom: '0px',right: -2.1*(_in+1)+'rem',color: '#00A753',fontSize: '1.8rem'}">
+												节</div>
+										</span>
+									</span>
+								</span>
+								<!--循环日历上面的状态 over-->
+							</span>
+						</span>
+					</div>
+				</div>
+				<!-- <div id="attendwrapright" style="float: right;width: 39%;border-left: 1px solid #E6E6EB;height: 284px;margin-top: 8px;text-align: center;">
+						<div>
+							<div style="color: #5AC8FA;font-size: 54px;">12</div>
+							<div style="color: #75787B;font-size: 14px;">2017年12月</div>
+							<div style="color: #FF4C4D;font-size: 12px;margin-top: 6px;">出勤状态：异常</div>
+							<div style="margin-top: 16px;"><i>图</i><span style="color: #2D2D2D;font-size: 14px;">上班：</span><span style="color: #2D2D2D;font-size: 14px;">08:35:00(正常)</span></div>
+							<div style="margin-top: 20px;"><i>图</i><span style="color: #2D2D2D;font-size: 14px;">上班：</span><span style="color: #2D2D2D;font-size: 14px;">08:35:00(正常)</span></div>
+							<div style="margin-top: 20px;"><i>图</i><span style="color: #2D2D2D;font-size: 14px;">上班：</span><span style="color: #2D2D2D;font-size: 14px;">08:35:00(正常)</span></div>
+							<div style="margin-top: 20px;"><i>图</i><span style="color: #2D2D2D;font-size: 14px;">上班：</span><span style="color: #2D2D2D;font-size: 14px;">08:35:00(正常)</span></div>
+							
+						</div>
+					</div> -->
+			</div>
+			<!--footer-->
+			<div>
+				<!-- style="height: 47px;border-top: 1px solid #E6E6EB;line-height: 47px;" -->
+				<span class="circle-point-1"></span>
+				<span style="color: #666666;position: relative;top: 1px;line-height: 13px;">异常</span>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script src="./js/calendar.js"></script>
+</body>
+
+</html>
